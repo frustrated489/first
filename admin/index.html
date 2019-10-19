@@ -36,9 +36,9 @@
         </li>
       </ul>
 
-      <div class="level01"><a href="#" target="main_frame"><i
+      <div class="level01"><a href="./comment_list.html" target="main_frame"><i
                         class="iconfont icon-comment"></i><span>评论管理</span></a></div>
-      <div class="level01" id="user"><a href="#" target="main_frame"><i
+      <div class="level01" id="user"><a href="./user.html" target="main_frame"><i
                         class="iconfont icon-user"></i><span>个人中心</span></a></div>
     </div>
     <!-- 顶部栏 -->
@@ -57,14 +57,40 @@
 </body>
 <script>
   $(function() {
+    // 二级菜单的展开收起
     $('.level01:eq(1)').click(function() {
-        // 隔壁的level02展开或者收起
-        $(this).next('.level02').slideToggle();
-      })
-      // 点击高亮效果
+      // 隔壁的level02展开或者收起
+      $(this).next('.level02').slideToggle();
+    });
+    // 点击高亮效果
     $('.level01').click(function() {
       $(this).addClass('active').siblings().removeClass('active');
-    });
+    })
+
+    // 获取用户信息
+    $.ajax({
+      url: "http://localhost:8080/api/v1/admin/user/info",
+      headers: {
+        Authorization: localStorage.getItem("token")
+      },
+      success: function(backData) {
+        // console.log(backData);
+        // 设置左侧的头像和名字
+        $(".user_info>img").atty('src', backData.data.userPic);
+        $(".user_inof>span").text("欢迎  " + backData.data.nickname);
+        // 右侧顶部的头像
+        $(".user_center_link>img").attr("src", backData.data.userPic);
+      },
+      // 请求失败之后的回调函数
+      error: function(backData) {
+        console.log("我错啦");
+        console.log(backData);
+        if (backData.statusText === 'Forbidden') {
+          alert('死一边去！');
+          window.location.href = './login.html';
+        }
+      }
+    })
 
   })
 </script>

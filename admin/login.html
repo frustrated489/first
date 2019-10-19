@@ -39,8 +39,9 @@
   </div>
   <script>
     $(function() {
+      // 登录功能
       $(".input_sub").click(function(e) {
-        // 登录功能
+        // 组织提交按钮的默认行为
         e.preventDefault()
           // 用户名
         var username = $(".input_txt").val().trim();
@@ -51,6 +52,7 @@
           alert("输入的账号密码不能为空");
           return;
         }
+        // 不为空
         $.ajax({
           url: "http://localhost:8080/api/v1/admin/user/login",
           type: "post",
@@ -66,7 +68,7 @@
             } else if (backData.code === 200) {
               // alert(backData.msg);
               window.localStorage.setItem('token', backData.token);
-
+              // 去index.html
               window.location.href = './index.html';
             }
 
